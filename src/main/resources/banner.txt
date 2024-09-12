@@ -1,0 +1,8 @@
+${AnsiColor.BRIGHT_BLUE}================================================================================================
+${AnsiColor.BRIGHT_YELLOW} __     __  _ _           ${AnsiColor.BRIGHT_GREEN}_____ _____  _____  _____ _   _  _____ ____   ____   ____ _______
+${AnsiColor.BRIGHT_YELLOW} \ \   / / | | |         ${AnsiColor.BRIGHT_GREEN}/ ____|  __ \|  __ \|_   _| \ | |/ ____|  _ \ / __ \ / __ \__   __|
+${AnsiColor.BRIGHT_YELLOW}  \ \_/ /  | | | ${AnsiColor.BRIGHT_CYAN} _____${AnsiColor.BRIGHT_GREEN} | (___ | |__) | |__) | | | |  \| | |  __| |_) | |  | | |  | | | |
+${AnsiColor.BRIGHT_YELLOW}   \   /   | | | ${AnsiColor.BRIGHT_CYAN}|______|${AnsiColor.BRIGHT_GREEN}\___ \|  ___/|  _  /  | | | . ` | | |_ |  _ <| |  | | |  | | | |
+${AnsiColor.BRIGHT_YELLOW}    | | |__| | |____    ${AnsiColor.BRIGHT_GREEN}____) | |    | | \ \ _| |_| |\  | |__| | |_) | |__| | |__| | | |
+${AnsiColor.BRIGHT_YELLOW}    |_|\____/|______|  ${AnsiColor.BRIGHT_GREEN}|_____/|_|    |_|  \_\_____|_| \_|\_____|____/ \____/ \____/  |_| ${AnsiStyle.BOLD}${AnsiStyle.UNDERLINE}v${spring-boot.version}${AnsiStyle.NORMAL}
+${AnsiColor.BRIGHT_BLUE}================================================================================================${AnsiStyle.NORMAL}

@@ -1,0 +1,35 @@
+[versions]
+dokka = "1.9.20"
+gson = "2.11.0"
+hibernate-validator = "8.0.1.Final"
+kotlin = "2.0.20"
+mica-auto = "3.1.4"
+mybatis-spring-boot = "3.0.3"
+mysql = "9.0.0"
+spring = "3.3.3"
+spring-dependency-management = "1.1.6"
+
+[libraries]
+mica-auto = { group = "net.dreamlu", name = "mica-auto", version.ref = "mica-auto" }
+spring-boot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
+
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+hibernate-validator = { group = "org.hibernate.validator", name = "hibernate-validator", version.ref = "hibernate-validator" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect" }
+kotlin-test-junit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5" }
+mybatis-spring-boot-starter = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter", version.ref = "mybatis-spring-boot" }
+mybatis-spring-boot-starter-test = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter-test", version.ref = "mybatis-spring-boot" }
+mysql = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysql" }
+spring-boot = { group = "org.springframework.boot", name = "spring-boot" }
+spring-boot-starter-jetty = { group = "org.springframework.boot", name = "spring-boot-starter-jetty" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+
+[plugins]
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
