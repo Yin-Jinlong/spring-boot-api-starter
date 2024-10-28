@@ -16,5 +16,5 @@ class ClientAdvice {
     @ExceptionHandler(BaseClientException::class)
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleException(e: BaseClientException) = JsonResponse.error(e)
+    fun handleException(e: BaseClientException) = JsonResponse.clientError(e)
 }

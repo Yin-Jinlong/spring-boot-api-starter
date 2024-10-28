@@ -16,9 +16,8 @@ class ServerAdvice {
     @ExceptionHandler(Exception::class)
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    fun error(e: Exception): JsonResponse {
+    fun error(e: Exception) = JsonResponse.error(e).also {
         e.printStackTrace()
-        return JsonResponse.error(e)
     }
 
 }

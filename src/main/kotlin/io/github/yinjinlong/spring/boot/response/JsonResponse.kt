@@ -1,5 +1,6 @@
 package io.github.yinjinlong.spring.boot.response
 
+import io.github.yinjinlong.spring.boot.exception.BaseClientException
 import io.github.yinjinlong.spring.boot.util.subClass
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
@@ -14,6 +15,7 @@ interface JsonResponse {
     companion object {
         private lateinit var okMethod: Method
         private lateinit var errorMethod: Method
+        private lateinit var clientErrorMethod: Method
 
         private fun Method.checkStatic() {
             if (!Modifier.isStatic(modifiers))
@@ -25,23 +27,17 @@ interface JsonResponse {
                 throw RuntimeException("ResponseJsonFactory.${this.name}() return type must be JsonResponse")
         }
 
-        private fun Method.checkArgsType(type: KClass<*>) {
-            if (parameterCount != 1)
-                throw RuntimeException("ResponseJsonFactory.${this.name}() args must be one")
-            if (!type.subClass(parameterTypes[0]))
-                throw RuntimeException("ResponseJsonFactory.${this.name}() args type must be ${type.simpleName}")
+        private fun Class<*>.getAndCheck(
+            name: String, argClass: KClass<*>
+        ): Method = getMethod(name, argClass.java).apply {
+            checkStatic()
+            checkReturnType()
         }
 
         fun registerFactory(respJsonFactoryClass: Class<*>) {
-            okMethod = respJsonFactoryClass.getMethod("ok", Any::class.java)
-            okMethod.checkStatic()
-            okMethod.checkReturnType()
-            okMethod.checkArgsType(Any::class)
-
-            errorMethod = respJsonFactoryClass.getMethod("error", Exception::class.java)
-            errorMethod.checkStatic()
-            errorMethod.checkReturnType()
-            errorMethod.checkArgsType(Exception::class)
+            okMethod = respJsonFactoryClass.getAndCheck("ok", Any::class)
+            errorMethod = respJsonFactoryClass.getAndCheck("error", Exception::class)
+            clientErrorMethod = respJsonFactoryClass.getAndCheck("clientError", BaseClientException::class)
         }
 
         fun ok(data: Any?): JsonResponse {
@@ -50,6 +46,10 @@ interface JsonResponse {
 
         fun error(e: Exception): JsonResponse {
             return errorMethod.invoke(null, e) as JsonResponse
+        }
+
+        fun clientError(e: BaseClientException): JsonResponse {
+            return clientErrorMethod.invoke(null, e) as JsonResponse
         }
     }
 }
