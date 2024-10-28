@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.yin-jinlong"
-version = "0.1.3"
+version = "0.1.4"
 description = "SpringBoot Kotlin Api服务 Starter"
 
 Props.init(rootDir)
@@ -48,6 +48,7 @@ dependencies {
     }
     api(libs.gson)
     api(libs.spring.boot.starter.jetty)
+    api(libs.spring.boot.starter.validation)
 
     // Database
     api(libs.mysql)
