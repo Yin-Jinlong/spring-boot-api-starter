@@ -24,6 +24,7 @@ mysql = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysql"
 spring-boot = { group = "org.springframework.boot", name = "spring-boot" }
 spring-boot-starter-jetty = { group = "org.springframework.boot", name = "spring-boot-starter-jetty" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
 
 [plugins]

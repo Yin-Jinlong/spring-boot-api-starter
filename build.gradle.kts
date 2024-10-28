@@ -38,7 +38,7 @@ dependencies {
     kapt(libs.mica.auto)
     kapt(libs.spring.boot.configuration.processor)
 
-    api("io.github.yin-jinlong:message-digest-kotlin:0.1.2")
+    api("io.github.yin-jinlong:message-digest-kotlin:0.1.3")
 
     // Spring Boot + Web
     api(libs.spring.boot)
