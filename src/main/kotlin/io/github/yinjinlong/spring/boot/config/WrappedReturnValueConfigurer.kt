@@ -6,7 +6,6 @@ import io.github.yinjinlong.spring.boot.support.MessageConverter
 import io.github.yinjinlong.spring.boot.support.ReturnValueHandler
 import jakarta.annotation.PostConstruct
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.http.converter.StringHttpMessageConverter
@@ -22,7 +21,6 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
 @Configuration
 @EnableConfigurationProperties(TemplateProperties::class)
 class WrappedReturnValueConfigurer(
-    val applicationContext: ApplicationContext,
     val templateProperties: TemplateProperties
 ) : WebMvcConfigurationSupport() {
 
@@ -34,7 +32,7 @@ class WrappedReturnValueConfigurer(
     override fun addReturnValueHandlers(returnValueHandlers: MutableList<HandlerMethodReturnValueHandler>) {
         returnValueHandlers.add(
             ReturnValueHandler(
-                applicationContext.getBeansOfType(MessageConverter::class.java)
+                applicationContext!!.getBeansOfType(MessageConverter::class.java)
                     .values
             )
         )
