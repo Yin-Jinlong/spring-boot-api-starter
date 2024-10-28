@@ -14,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer
  * @author YJL
  */
 open class ReturnValueHandler(
-    val converters: List<MessageConverter<*>>
+    val converters: Collection<MessageConverter<*>>
 ) : HandlerMethodReturnValueHandler {
 
     override fun supportsReturnType(returnType: MethodParameter) = true
