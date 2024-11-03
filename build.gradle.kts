@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.yin-jinlong"
-version = "0.2.0"
+version = "0.2.1"
 description = "SpringBoot Kotlin Api服务 Starter"
 
 Props.init(rootDir)
