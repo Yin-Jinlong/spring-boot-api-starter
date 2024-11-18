@@ -2,6 +2,7 @@ package io.github.yinjinlong.spring.boot.support
 
 import io.github.yinjinlong.spring.boot.annotations.ContentType
 import io.github.yinjinlong.spring.boot.util.mediaType
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.core.MethodParameter
 import org.springframework.http.server.ServletServerHttpResponse
@@ -36,6 +37,9 @@ open class ReturnValueHandler(
             }
         }
 
+        val req = webRequest.getNativeRequest(HttpServletRequest::class.java)
+            ?: throw RuntimeException("Could not get HttpServletRequest")
+
         val out = ServletServerHttpResponse(
             webRequest.getNativeResponse(HttpServletResponse::class.java)
                 ?: throw RuntimeException("Could not get HttpServletResponse")
@@ -51,5 +55,7 @@ open class ReturnValueHandler(
 
         converter.write(returnValue, method, out)
 
+        req.inputStream.close()
+        out.close()
     }
 }
