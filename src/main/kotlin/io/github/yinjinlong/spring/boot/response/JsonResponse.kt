@@ -2,6 +2,7 @@ package io.github.yinjinlong.spring.boot.response
 
 import io.github.yinjinlong.spring.boot.exception.BaseClientException
 import io.github.yinjinlong.spring.boot.util.subClass
+import org.springframework.http.HttpStatus
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
@@ -11,6 +12,7 @@ import kotlin.reflect.KClass
  * @author YJL
  */
 interface JsonResponse {
+    var status: HttpStatus
 
     companion object {
         private lateinit var okMethod: Method

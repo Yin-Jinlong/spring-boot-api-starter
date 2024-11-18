@@ -17,9 +17,11 @@ class JsonMessageConverter(
 ) : MessageConverter<Any> {
 
     override fun write(v: Any?, method: Method, output: ServerHttpResponse) {
+        val resp = if (v is JsonResponse) v else JsonResponse.ok(v)
+        output.setStatusCode(resp.status)
         output.body.write(
             gson.toJson(
-                if (v is JsonResponse) v else JsonResponse.ok(v)
+                resp
             ).toByteArray()
         )
     }
