@@ -22,10 +22,11 @@ mybatis-spring-boot-starter = { group = "org.mybatis.spring.boot", name = "mybat
 mybatis-spring-boot-starter-test = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter-test", version.ref = "mybatis-spring-boot" }
 mysql = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysql" }
 spring-boot = { group = "org.springframework.boot", name = "spring-boot" }
-spring-boot-starter-jetty = { group = "org.springframework.boot", name = "spring-boot-starter-jetty" }
+spring-boot-starter-undertow = { group = "org.springframework.boot", name = "spring-boot-starter-undertow" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
 spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-websocket = { group = "org.springframework.boot", name = "spring-boot-starter-websocket" }
 
 [plugins]
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

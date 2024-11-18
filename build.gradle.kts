@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.yin-jinlong"
-version = "0.2.1"
+version = "0.3.0"
 description = "SpringBoot Kotlin Api服务 Starter"
 
 Props.init(rootDir)
@@ -38,7 +38,7 @@ dependencies {
     kapt(libs.mica.auto)
     kapt(libs.spring.boot.configuration.processor)
 
-    api("io.github.yin-jinlong:message-digest-kotlin:0.1.3")
+    api("io.github.yin-jinlong:message-digest-kotlin:0.1.4")
 
     // Spring Boot + Web
     api(libs.spring.boot)
@@ -47,8 +47,9 @@ dependencies {
         exclude("org.springframework.boot", "spring-boot-starter-tomcat")
     }
     api(libs.gson)
-    api(libs.spring.boot.starter.jetty)
+    api(libs.spring.boot.starter.undertow)
     api(libs.spring.boot.starter.validation)
+    api(libs.spring.boot.starter.websocket)
 
     // Database
     api(libs.mysql)
