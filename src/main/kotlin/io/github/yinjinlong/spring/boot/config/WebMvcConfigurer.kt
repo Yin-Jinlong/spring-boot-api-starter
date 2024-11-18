@@ -24,14 +24,14 @@ import kotlin.reflect.KClass
  * @author YJL
  */
 @Configuration
-@EnableConfigurationProperties(TemplateProperties::class)
-class WrappedReturnValueConfigurer(
-    val templateProperties: TemplateProperties
+@EnableConfigurationProperties(WebMvcProperties::class)
+class  WebMvcConfigurer(
+    val webMvcProperties: WebMvcProperties
 ) : WebMvcConfigurationSupport() {
 
     @PostConstruct
     fun init() {
-        JsonResponse.registerFactory(templateProperties.responseJsonFactory)
+        JsonResponse.registerFactory(webMvcProperties.factory)
     }
 
     fun <T : Any> getBeans(type: KClass<T>): Collection<T> {
@@ -78,14 +78,14 @@ class WrappedReturnValueConfigurer(
 
     override fun configureHandlerExceptionResolvers(exceptionResolvers: MutableList<HandlerExceptionResolver>) {
         exceptionResolvers.add(ExceptionResolver().apply {
-            customReturnValueHandlers = this@WrappedReturnValueConfigurer.returnValueHandlers.toList()
-            applicationContext = this@WrappedReturnValueConfigurer.applicationContext
+            customReturnValueHandlers = this@WebMvcConfigurer.returnValueHandlers.toList()
+            applicationContext = this@WebMvcConfigurer.applicationContext
             afterPropertiesSet()
         })
         exceptionResolvers.add(DefaultHandlerExceptionResolver())
     }
 
     override fun createRequestMappingHandlerAdapter() = RequestMappingHandlerAdapter().apply {
-        returnValueHandlers = this@WrappedReturnValueConfigurer.returnValueHandlers
+        returnValueHandlers = this@WebMvcConfigurer.returnValueHandlers
     }
 }

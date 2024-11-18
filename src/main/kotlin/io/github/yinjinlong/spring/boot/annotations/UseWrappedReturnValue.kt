@@ -1,6 +1,6 @@
 package io.github.yinjinlong.spring.boot.annotations
 
-import io.github.yinjinlong.spring.boot.config.WrappedReturnValueConfigurer
+import io.github.yinjinlong.spring.boot.config.WebMvcConfigurer
 import org.springframework.context.annotation.Import
 
 /**
@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Import
  */
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-@Import(WrappedReturnValueConfigurer::class)
+@Import(WebMvcConfigurer::class)
 annotation class UseWrappedReturnValue
