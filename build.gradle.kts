@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.yin-jinlong"
-version = "0.3.0"
+version = "0.3.1"
 description = "SpringBoot Kotlin Api服务 Starter"
 
 Props.init(rootDir)
@@ -116,8 +116,8 @@ publishing {
 
                 licenses {
                     license {
-                        name = "GLPv3"
-                        url = "https://www.gnu.org/licenses/gpl-3.0.en.html#license-text"
+                        name = "Apache 2.0"
+                        url = "https://www.apache.org/licenses/LICENSE-2.0.html"
                     }
                 }
 
