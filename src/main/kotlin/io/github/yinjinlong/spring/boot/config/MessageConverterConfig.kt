@@ -23,15 +23,8 @@ class MessageConverterConfig {
     fun stringMessageConverter() = StringMessageConverter()
 
     @Bean
-    fun fileMessageConverter(
-        fileMediaTypeGetter: FileMessageConverter.FileMediaTypeGetter
-    ) = FileMessageConverter(fileMediaTypeGetter)
+    fun fileMessageConverter() = FileMessageConverter()
 
     @Bean
-    @Autowired
     fun jsonMessageConverter(gson: Gson) = JsonMessageConverter(gson)
-
-    @ConditionalOnMissingBean
-    @Bean
-    fun defaultContentTypeParser() = FileMessageConverter.FileMediaTypeGetter.Default
 }
