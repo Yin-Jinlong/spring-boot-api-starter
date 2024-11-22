@@ -37,9 +37,6 @@ open class ReturnValueHandler(
             }
         }
 
-        val req = webRequest.getNativeRequest(HttpServletRequest::class.java)
-            ?: throw RuntimeException("Could not get HttpServletRequest")
-
         val out = ServletServerHttpResponse(
             webRequest.getNativeResponse(HttpServletResponse::class.java)
                 ?: throw RuntimeException("Could not get HttpServletResponse")
@@ -54,8 +51,5 @@ open class ReturnValueHandler(
         out.headers.contentType = cta?.type?.mediaType ?: convertDefaultContentType?.mediaType
 
         converter.write(returnValue, method, out)
-
-        req.inputStream.close()
-        out.close()
     }
 }
