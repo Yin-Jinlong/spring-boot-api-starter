@@ -5,15 +5,22 @@ import io.github.yinjinlong.spring.boot.response.JsonResponse
 import io.github.yinjinlong.spring.boot.support.MessageConverter
 import io.github.yinjinlong.spring.boot.support.ReturnValueHandler
 import jakarta.annotation.PostConstruct
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.AnnotatedMethod
 import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.http.converter.StringHttpMessageConverter
+import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.context.request.WebRequestInterceptor
+import org.springframework.web.context.request.async.WebAsyncUtils
+import org.springframework.web.method.HandlerMethod
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler
 import org.springframework.web.servlet.HandlerExceptionResolver
 import org.springframework.web.servlet.HandlerInterceptor
+import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
@@ -25,13 +32,18 @@ import kotlin.reflect.KClass
  */
 @Configuration
 @EnableConfigurationProperties(WebMvcProperties::class)
-class  WebMvcConfigurer(
+class WebMvcConfigurer(
     val webMvcProperties: WebMvcProperties
 ) : WebMvcConfigurationSupport() {
+
+    lateinit var returnValueHandler: ReturnValueHandler
 
     @PostConstruct
     fun init() {
         JsonResponse.registerFactory(webMvcProperties.factory)
+        returnValueHandler = ReturnValueHandler(
+            getBeans(MessageConverter::class)
+        )
     }
 
     fun <T : Any> getBeans(type: KClass<T>): Collection<T> {
@@ -65,9 +77,7 @@ class  WebMvcConfigurer(
 
     override fun addReturnValueHandlers(returnValueHandlers: MutableList<HandlerMethodReturnValueHandler>) {
         returnValueHandlers.add(
-            ReturnValueHandler(
-                getBeans(MessageConverter::class)
-            )
+            returnValueHandler
         )
     }
 
@@ -85,7 +95,25 @@ class  WebMvcConfigurer(
         exceptionResolvers.add(DefaultHandlerExceptionResolver())
     }
 
-    override fun createRequestMappingHandlerAdapter() = RequestMappingHandlerAdapter().apply {
-        returnValueHandlers = this@WebMvcConfigurer.returnValueHandlers
+    override fun createRequestMappingHandlerAdapter() = object : RequestMappingHandlerAdapter() {
+        init {
+            returnValueHandlers = this@WebMvcConfigurer.returnValueHandlers
+        }
+
+        override fun invokeHandlerMethod(
+            request: HttpServletRequest,
+            response: HttpServletResponse,
+            handlerMethod: HandlerMethod
+        ): ModelAndView? {
+            val mav = super.invokeHandlerMethod(request, response, handlerMethod)
+            val method = handlerMethod.method
+            if (method.returnType === Void.TYPE || method.returnType === Unit::class.java) {
+                val asyncWebRequest = WebAsyncUtils.createAsyncWebRequest(request, response)
+                val webRequest = if (asyncWebRequest is ServletWebRequest) asyncWebRequest
+                else ServletWebRequest(request, response)
+                returnValueHandler.handleVoidReturnValue(method, webRequest)
+            }
+            return mav
+        }
     }
 }
