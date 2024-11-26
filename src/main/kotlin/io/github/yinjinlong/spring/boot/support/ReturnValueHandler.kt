@@ -1,6 +1,8 @@
 package io.github.yinjinlong.spring.boot.support
 
 import io.github.yinjinlong.spring.boot.annotations.ContentType
+import io.github.yinjinlong.spring.boot.exception.BaseClientException
+import io.github.yinjinlong.spring.boot.response.JsonResponse
 import io.github.yinjinlong.spring.boot.util.mediaType
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.core.MethodParameter
@@ -55,6 +57,12 @@ open class ReturnValueHandler(
         webRequest: NativeWebRequest
     ) {
         mavContainer.isRequestHandled = true
-        handleReturnValue(returnValue, returnType.method!!, webRequest)
+        handleReturnValue(
+            when (returnValue) {
+                is BaseClientException -> JsonResponse.clientError(returnValue)
+                is Exception -> JsonResponse.error(returnValue)
+                else -> returnValue
+            }, returnType.method!!, webRequest
+        )
     }
 }
