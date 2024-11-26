@@ -20,11 +20,6 @@ open class ReturnValueHandler(
 
     override fun supportsReturnType(returnType: MethodParameter) = true
 
-    fun handleVoidReturnValue(
-        method: Method,
-        webRequest: NativeWebRequest
-    ) = handleReturnValue(null, method, webRequest)
-
     private fun handleReturnValue(
         returnValue: Any?,
         method: Method,
