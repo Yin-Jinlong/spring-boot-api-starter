@@ -1,6 +1,8 @@
 package io.github.yinjinlong.spring.boot.support
 
 import io.github.yinjinlong.spring.boot.annotations.ResponseEmpty
+import io.github.yinjinlong.spring.boot.annotations.SkipHandle
+import org.springframework.core.annotation.AnnotatedElementUtils
 import org.springframework.util.StringUtils
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.method.HandlerMethod
@@ -20,6 +22,7 @@ class HandleReturnValueHandlerMethod(
     var returnValueHandlers: HandlerMethodReturnValueHandlerComposite? = null
 
     override fun setHandlerMethodReturnValueHandlers(returnValueHandlers: HandlerMethodReturnValueHandlerComposite) {
+        super.setHandlerMethodReturnValueHandlers(returnValueHandlers)
         this.returnValueHandlers = returnValueHandlers
     }
 
@@ -47,6 +50,9 @@ class HandleReturnValueHandlerMethod(
         mavContainer: ModelAndViewContainer,
         vararg providedArgs: Any?
     ) {
+        if (AnnotatedElementUtils.hasAnnotation(resolvedFromHandlerMethod!!.method, SkipHandle::class.java))
+            return super.invokeAndHandle(webRequest, mavContainer, *providedArgs)
+
         val returnValue = invokeForRequest(webRequest, mavContainer, *providedArgs)
         setResponseStatus(webRequest)
 

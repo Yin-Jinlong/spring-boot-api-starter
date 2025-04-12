@@ -2,9 +2,9 @@ package io.github.yinjinlong.spring.boot.test
 
 
 import io.github.yinjinlong.spring.boot.annotations.ResponseEmpty
+import io.github.yinjinlong.spring.boot.annotations.SkipHandle
 import io.github.yinjinlong.spring.boot.annotations.UseWrappedReturnValue
-import io.github.yinjinlong.spring.boot.response.JsonResponse
-import jakarta.annotation.PostConstruct
+
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.http.HttpStatus
@@ -23,6 +23,10 @@ class TestApplication {
 
     @GetMapping("/test/void")
     fun test(@RequestParam arg: String) = Unit
+
+    @SkipHandle
+    @GetMapping("/test/1")
+    fun test1(@RequestParam arg: String) = 1
 
     @ResponseEmpty
     @GetMapping("/test/empty")

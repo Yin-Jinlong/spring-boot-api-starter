@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.http.converter.StringHttpMessageConverter
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.context.request.WebRequestInterceptor
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
@@ -77,25 +78,32 @@ class WebMvcConfigurer(
     }
 
     override fun extendMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
-        converters.clear()
-        converters.add(StringHttpMessageConverter())
+        for (converter in converters) {
+            when (converter) {
+                is StringHttpMessageConverter -> {
+                    converter.defaultCharset = Charsets.UTF_8
+                }
+
+                is MappingJackson2HttpMessageConverter -> {
+                    converter.defaultCharset = Charsets.UTF_8
+                }
+            }
+        }
     }
 
     override fun configureHandlerExceptionResolvers(exceptionResolvers: MutableList<HandlerExceptionResolver>) {
-        exceptionResolvers.add(ExceptionResolver().apply {
-            customReturnValueHandlers = this@WebMvcConfigurer.returnValueHandlers.toList()
-            applicationContext = this@WebMvcConfigurer.applicationContext
-            afterPropertiesSet()
-        })
+        exceptionResolvers.add(ExceptionResolver(this@WebMvcConfigurer.returnValueHandler))
         exceptionResolvers.add(DefaultHandlerExceptionResolver())
     }
 
     override fun createRequestMappingHandlerAdapter() = object : RequestMappingHandlerAdapter() {
-        init {
-            returnValueHandlers = this@WebMvcConfigurer.returnValueHandlers
-        }
 
         override fun createInvocableHandlerMethod(handlerMethod: HandlerMethod) =
             HandleReturnValueHandlerMethod(handlerMethod)
+
+        override fun afterPropertiesSet() {
+            super.afterPropertiesSet()
+            returnValueHandlers = this@WebMvcConfigurer.returnValueHandlers + (this.returnValueHandlers ?: listOf())
+        }
     }
 }

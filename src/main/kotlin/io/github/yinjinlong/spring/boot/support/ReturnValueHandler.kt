@@ -1,11 +1,13 @@
 package io.github.yinjinlong.spring.boot.support
 
 import io.github.yinjinlong.spring.boot.annotations.ContentType
+import io.github.yinjinlong.spring.boot.annotations.SkipHandle
 import io.github.yinjinlong.spring.boot.exception.BaseClientException
 import io.github.yinjinlong.spring.boot.response.JsonResponse
 import io.github.yinjinlong.spring.boot.util.mediaType
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.core.MethodParameter
+import org.springframework.core.annotation.AnnotatedElementUtils
 import org.springframework.http.server.ServletServerHttpResponse
 import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler
@@ -20,7 +22,8 @@ open class ReturnValueHandler(
     val converters: Collection<MessageConverter<*>>
 ) : HandlerMethodReturnValueHandler {
 
-    override fun supportsReturnType(returnType: MethodParameter) = true
+    override fun supportsReturnType(returnType: MethodParameter) =
+        !AnnotatedElementUtils.hasAnnotation(returnType.method!!, SkipHandle::class.java)
 
     private fun handleReturnValue(
         returnValue: Any?,
