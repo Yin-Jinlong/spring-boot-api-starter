@@ -2,6 +2,7 @@ package io.github.yinjinlong.spring.boot.support
 
 import io.github.yinjinlong.spring.boot.annotations.ResponseEmpty
 import io.github.yinjinlong.spring.boot.annotations.SkipHandle
+import io.github.yinjinlong.spring.boot.exception.BaseClientException
 import org.springframework.core.annotation.AnnotatedElementUtils
 import org.springframework.util.StringUtils
 import org.springframework.web.context.request.ServletWebRequest
@@ -53,26 +54,35 @@ class HandleReturnValueHandlerMethod(
         if (AnnotatedElementUtils.hasAnnotation(resolvedFromHandlerMethod!!.method, SkipHandle::class.java))
             return super.invokeAndHandle(webRequest, mavContainer, *providedArgs)
 
-        val returnValue = invokeForRequest(webRequest, mavContainer, *providedArgs)
-        setResponseStatus(webRequest)
+        try {
+            val returnValue = invokeForRequest(webRequest, mavContainer, *providedArgs)
+            setResponseStatus(webRequest)
 
-        if (returnValue == null) {
-            if (resolvedFromHandlerMethod?.hasMethodAnnotation(ResponseEmpty::class.java) == true) {
+            if (returnValue == null) {
+                if (resolvedFromHandlerMethod?.hasMethodAnnotation(ResponseEmpty::class.java) == true) {
+                    mavContainer.isRequestHandled = true
+                    return
+                }
+            } else if (StringUtils.hasText(responseStatusReason)) {
                 mavContainer.isRequestHandled = true
                 return
             }
-        } else if (StringUtils.hasText(responseStatusReason)) {
-            mavContainer.isRequestHandled = true
-            return
-        }
 
-        mavContainer.isRequestHandled = false
-        check(returnValueHandlers != null) { "no return value handler" }
-        returnValueHandlers!!.handleReturnValue(
-            returnValue,
-            getReturnValueType(returnValue),
-            mavContainer,
-            webRequest
-        )
+            mavContainer.isRequestHandled = false
+            check(returnValueHandlers != null) { "no return value handler" }
+            returnValueHandlers!!.handleReturnValue(
+                returnValue,
+                getReturnValueType(returnValue),
+                mavContainer,
+                webRequest
+            )
+        } catch (e: BaseClientException) {
+            returnValueHandlers!!.handleReturnValue(
+                e,
+                getReturnValueType(e),
+                mavContainer,
+                webRequest
+            )
+        }
     }
 }

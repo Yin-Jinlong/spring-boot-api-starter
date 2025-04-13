@@ -27,6 +27,6 @@ class ExceptionResolver(
 
     override fun afterPropertiesSet() {
         super.afterPropertiesSet()
-        customReturnValueHandlers = listOf(returnValueHandler) + (this.customReturnValueHandlers ?: listOf())
+        setReturnValueHandlers(listOf(returnValueHandler) + returnValueHandlers)
     }
 }
