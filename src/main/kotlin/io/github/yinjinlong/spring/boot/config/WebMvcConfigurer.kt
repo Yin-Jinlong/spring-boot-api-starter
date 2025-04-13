@@ -15,12 +15,11 @@ import org.springframework.web.context.request.WebRequestInterceptor
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler
-import org.springframework.web.servlet.HandlerExceptionResolver
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
+import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
-import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver
 import kotlin.reflect.KClass
 
 /**
@@ -91,10 +90,8 @@ class WebMvcConfigurer(
         }
     }
 
-    override fun configureHandlerExceptionResolvers(exceptionResolvers: MutableList<HandlerExceptionResolver>) {
-        exceptionResolvers.add(ExceptionResolver(this@WebMvcConfigurer.returnValueHandler))
-        exceptionResolvers.add(DefaultHandlerExceptionResolver())
-    }
+    override fun createExceptionHandlerExceptionResolver(): ExceptionHandlerExceptionResolver =
+        ExceptionResolver(returnValueHandler)
 
     override fun createRequestMappingHandlerAdapter() = object : RequestMappingHandlerAdapter() {
 
